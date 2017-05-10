@@ -1296,6 +1296,21 @@ const appActions = {
       actionType: appConstants.APP_AUTOPLAY_BLOCKED,
       tabId
     })
+  },
+
+  /**
+   * Indicates that the urlbar text has changed, usually from user input
+   *
+   * @param {string} location - The text to set as the new navbar URL input
+   */
+  urlBarTextChanged: function (windowId, input) {
+    AppDispatcher.dispatch({
+      actionType: appConstants.APP_URL_BAR_TEXT_CHANGED,
+      input,
+      queryInfo: {
+        windowId
+      }
+    })
   }
 }
 
