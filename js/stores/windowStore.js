@@ -41,8 +41,7 @@ let windowState = Immutable.fromJS({
     mouseInTitlebar: false,
     menubar: {
     }
-  },
-  searchDetail: null
+  }
 })
 let lastEmittedState
 
@@ -136,7 +135,7 @@ const newFrame = (frameOpts, openInForeground, insertionIndex, nextKey) => {
     frameOpts.location = UrlUtil.getUrlFromInput(frameOpts.location)
   } else {
     // location is a search
-    const defaultURL = windowStore.getState().getIn(['searchDetail', 'searchURL'])
+    const defaultURL = appStoreRenderer.state.getIn(['searchDetail', 'searchURL'])
     if (defaultURL) {
       frameOpts.location = defaultURL
         .replace('{searchTerms}', encodeURIComponent(frameOpts.location))
@@ -433,11 +432,6 @@ const doAction = (action) => {
       windowState = windowState.mergeIn(framePath, {
         activeShortcut: action.activeShortcut,
         activeShortcutDetails: action.activeShortcutDetails
-      })
-      break
-    case windowConstants.WINDOW_SET_SEARCH_DETAIL:
-      windowState = windowState.merge({
-        searchDetail: action.searchDetail
       })
       break
     case windowConstants.WINDOW_SET_FIND_DETAIL:
