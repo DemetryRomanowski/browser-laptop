@@ -233,7 +233,7 @@ class Tab extends ImmutableComponent {
     setImmediate(() => {
       const currentSize = getTabBreakpoint(this.tabSize)
       // Avoid updating breakpoint when user enters fullscreen (see #7301)
-      !this.props.hasTabInFullScreen && windowActions.setTabBreakpoint(this.frame, currentSize)
+      !this.props.hasTabInFullScreen && windowActions.setTabBreakpoint(this.frame.get('key'), currentSize)
     })
   }
 
