@@ -102,17 +102,6 @@ const windowActions = {
   },
 
   /**
-   * Dispatches a message when tab data changes
-   * @param {Object} tabs - the tab properties
-   */
-  tabDataChanged: function (tabs) {
-    dispatch({
-      actionType: windowConstants.WINDOW_TAB_DATA_CHANGED,
-      tabs
-    })
-  },
-
-  /**
    * Dispatches a message to set the frame error state
    * @param {Object} frameProps - The frame properties
    * @param {Object} errorDetails - The error properties
@@ -299,13 +288,13 @@ const windowActions = {
   /**
    * Dispatches a message to the store to set the tab breakpoint.
    *
-   * @param {Object} frameProps - the frame properties for the webview in question.
+   * @param {Object} frameKey - the frame key for the webview in question.
    * @param {string} breakpoint - the tab breakpoint to change to
    */
-  setTabBreakpoint: function (frameProps, breakpoint) {
+  setTabBreakpoint: function (frameKey, breakpoint) {
     dispatch({
       actionType: windowConstants.WINDOW_SET_TAB_BREAKPOINT,
-      frameProps,
+      frameKey,
       breakpoint
     })
   },

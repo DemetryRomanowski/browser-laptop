@@ -85,16 +85,6 @@ Dispatches a message when the guestInstanceId changes for a frame
 
 
 
-### tabDataChanged(tabs) 
-
-Dispatches a message when tab data changes
-
-**Parameters**
-
-**tabs**: `Object`, the tab properties
-
-
-
 ### setFrameError(frameProps, errorDetails) 
 
 Dispatches a message to set the frame error state
@@ -245,13 +235,13 @@ Dispatches a message to the store to set the tab page index.
 
 
 
-### setTabBreakpoint(frameProps, breakpoint) 
+### setTabBreakpoint(frameKey, breakpoint) 
 
 Dispatches a message to the store to set the tab breakpoint.
 
 **Parameters**
 
-**frameProps**: `Object`, the frame properties for the webview in question.
+**frameKey**: `Object`, the frame key for the webview in question.
 
 **breakpoint**: `string`, the tab breakpoint to change to
 
