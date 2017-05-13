@@ -430,7 +430,7 @@ const api = {
   },
 
   loadURLInActiveTab: (state, windowId, url) => {
-    const tabValue = tabState.getActiveTabValue(state, windowId)
+    const tabValue = tabState.getActiveTab(state, windowId)
     if (tabValue) {
       api.loadURLInTab(state, tabValue.get('tabId'), url)
     }
