@@ -64,6 +64,17 @@ const tokenizeInput = (data) => {
   return parts
 }
 
+const add = (data) => {
+  if (!initialized) {
+    return
+  }
+  if (typeof data === 'string') {
+    engine.add(data)
+  } else {
+    engine.add(data.toJS ? data.toJS() : data)
+  }
+}
+
 const query = (input, options = {}) => {
   if (!initialized) {
     return Promise.resolve([])
@@ -90,6 +101,7 @@ const query = (input, options = {}) => {
 
 module.exports = {
   init,
+  add,
   tokenizeInput,
   query
 }
