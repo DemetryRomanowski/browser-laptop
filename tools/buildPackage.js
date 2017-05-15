@@ -25,7 +25,7 @@ if (isWindows) {
   appIcon = 'res/app.png'
 }
 
-const buildDir = 'Brave-' + process.platform + '-' + arch
+const buildDir = 'TechBrowser-' + process.platform + '-' + arch
 
 var env = {
   NODE_ENV: 'production',
@@ -51,8 +51,8 @@ var cmds = ['echo cleaning up target...']
 
 if (isWindows) {
   cmds = cmds.concat([
-    '(if exist Brave-win32-x64 rmdir /s /q Brave-win32-x64)',
-    '(if exist Brave-win32-ia32 rmdir /s /q Brave-win32-ia32)'
+    '(if exist TechBrowser-win32-x64 rmdir /s /q TechBrowser-win32-x64)',
+    '(if exist TechBrowser-win32-ia32 rmdir /s /q TechBrowser-win32-ia32)'
   ])
 
   // Remove the destination folder for the selected arch
@@ -69,7 +69,7 @@ if (isWindows) {
   cmds = cmds.concat([
     'rm -Rf ' + buildDir,
     'rm -Rf dist',
-    'rm -f Brave.tar.bz2'
+    'rm -f TechBrowser.tar.bz2'
   ])
 }
 
@@ -78,12 +78,12 @@ cmds = cmds.concat([
   'echo starting build...'
 ])
 
-console.log('Building version ' + VersionInfo.braveVersion + ' in ' + buildDir + ' with Electron ' + VersionInfo.electronVersion)
+console.log('Building version ' + VersionInfo.TechBrowserVersion + ' in ' + buildDir + ' with Electron ' + VersionInfo.electronVersion)
 
 cmds = cmds.concat([
   '"./node_modules/.bin/webpack"',
   'npm run checks',
-  'node ./node_modules/electron-packager/cli.js . Brave' +
+  'node ./node_modules/electron-packager/cli.js . TechBrowser' +
     ' --overwrite' +
     ' --ignore="' + ignoredPaths.join('|') + '"' +
     ' --platform=' + process.platform +
@@ -91,45 +91,45 @@ cmds = cmds.concat([
     ' --version=' + VersionInfo.electronVersion +
     ' --icon=' + appIcon +
     ' --asar=true' +
-    ' --app-version=' + VersionInfo.braveVersion +
+    ' --app-version=' + VersionInfo.TechBrowserVersion +
     ' --build-version=' + VersionInfo.electronVersion +
     ' --protocol="http" --protocol-name="HTTP Handler"' +
     ' --protocol="https" --protocol-name="HTTPS Handler"' +
-    ' --version-string.CompanyName="Brave Software"' +
-    ' --version-string.ProductName="Brave"' +
-    ' --version-string.Copyright="Copyright 2017, Brave Software"' +
-    ' --version-string.FileDescription="Brave"'
+    ' --version-string.CompanyName="TechBrowser Software"' +
+    ' --version-string.ProductName="TechBrowser"' +
+    ' --version-string.Copyright="Copyright 2017, TechBrowser Software"' +
+    ' --version-string.FileDescription="TechBrowser"'
 ])
 
 function BuildManifestFile () {
   const fs = require('fs')
   const fileContents = fs.readFileSync('./res/Update.VisualElementsManifest.xml', 'utf8')
-  const versionedFileContents = fileContents.replace(/{{braveVersion}}/g, 'app-' + VersionInfo.braveVersion)
+  const versionedFileContents = fileContents.replace(/{{TechBrowserVersion}}/g, 'app-' + VersionInfo.TechBrowserVersion)
   fs.writeFileSync('temp.VisualElementsManifest.xml', versionedFileContents, 'utf8')
 }
 
 if (isLinux) {
-  cmds.push('mv Brave-linux-x64/Brave Brave-linux-x64/brave')
+  cmds.push('mv TechBrowser-linux-x64/TechBrowser TechBrowser-linux-x64/TechBrowser')
   cmds.push('ncp ./app/extensions ' + path.join(buildDir, 'resources', 'extensions'))
 } else if (isDarwin) {
-  cmds.push('ncp ./app/extensions ' + path.join(buildDir, 'Brave.app', 'Contents', 'Resources', 'extensions'))
+  cmds.push('ncp ./app/extensions ' + path.join(buildDir, 'TechBrowser.app', 'Contents', 'Resources', 'extensions'))
 } else if (isWindows) {
   BuildManifestFile()
   cmds.push('move .\\temp.VisualElementsManifest.xml "' + path.join(buildDir, 'resources', 'Update.VisualElementsManifest.xml') + '"')
   cmds.push('copy .\\res\\start-tile-70.png "' + path.join(buildDir, 'resources', 'start-tile-70.png') + '"')
   cmds.push('copy .\\res\\start-tile-150.png "' + path.join(buildDir, 'resources', 'start-tile-150.png') + '"')
-  cmds.push('makensis.exe -DARCH=' + arch + ' res/braveDefaults.nsi')
+  cmds.push('makensis.exe -DARCH=' + arch + ' res/TechBrowserDefaults.nsi')
   cmds.push('ncp ./app/extensions ' + path.join(buildDir, 'resources', 'extensions'))
-  // Make sure the Brave.exe binary is squirrel aware so we get squirrel events and so that Squirrel doesn't auto create shortcuts.
-  cmds.push('"node_modules/rcedit/bin/rcedit.exe" ./Brave-win32-' + arch + '/Brave.exe --set-version-string "SquirrelAwareVersion" "1"')
+  // Make sure the TechBrowser.exe binary is squirrel aware so we get squirrel events and so that Squirrel doesn't auto create shortcuts.
+  cmds.push('"node_modules/rcedit/bin/rcedit.exe" ./TechBrowser-win32-' + arch + '/TechBrowser.exe --set-version-string "SquirrelAwareVersion" "1"')
 }
 
 cmds.push('mkdirp ' + path.join(buildDir, 'resources', 'app.asar.unpacked', 'node_modules', 'spellchecker', 'vendor', 'hunspell_dictionaries'))
 cmds.push('ncp ' + path.join('node_modules', 'spellchecker', 'vendor', 'hunspell_dictionaries') + ' ' + path.join(buildDir, 'resources', 'app.asar.unpacked', 'node_modules', 'spellchecker', 'vendor', 'hunspell_dictionaries'))
 
 if (isDarwin) {
-  cmds.push('mkdirp ' + path.join(buildDir, 'Brave.app', 'Contents', 'Resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten'))
-  cmds.push('ncp ' + path.join('node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem') + ' ' + path.join(buildDir, 'Brave.app', 'Contents', 'Resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem'))
+  cmds.push('mkdirp ' + path.join(buildDir, 'TechBrowser.app', 'Contents', 'Resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten'))
+  cmds.push('ncp ' + path.join('node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem') + ' ' + path.join(buildDir, 'TechBrowser.app', 'Contents', 'Resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem'))
 } else {
   cmds.push('mkdirp ' + path.join(buildDir, 'resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten'))
   cmds.push('ncp ' + path.join('node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem') + ' ' + path.join(buildDir, 'resources', 'app.asar.unpacked', 'node_modules', 'node-anonize2-relic-emscripten', 'anonize2.js.mem'))

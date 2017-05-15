@@ -15,9 +15,9 @@ if (isWindows) {
     arch = 'ia32'
   }
 }
-const buildDir = 'Brave-' + process.platform + '-' + arch
+const buildDir = 'TechBrowser-' + process.platform + '-' + arch
 
-console.log('Building install and update for version ' + VersionInfo.braveVersion + ' in ' + buildDir + ' with Electron ' + VersionInfo.electronVersion)
+console.log('Building install and update for version ' + VersionInfo.TechBrowserVersion + ' in ' + buildDir + ' with Electron ' + VersionInfo.electronVersion)
 
 if (isDarwin) {
   const identifier = process.env.IDENTIFIER
@@ -28,29 +28,29 @@ if (isDarwin) {
 
   cmds = [
     // Remove old
-    'rm -f ' + outDir + '/Brave.dmg',
+    'rm -f ' + outDir + '/TechBrowser.dmg',
 
     // Sign it
-    'cd ' + buildDir + '/Brave.app/Contents/Frameworks',
+    'cd ' + buildDir + '/TechBrowser.app/Contents/Frameworks',
     'codesign --deep --force --strict --verbose --sign $IDENTIFIER *',
     'cd ../../..',
-    'codesign --deep --force --strict --verbose --sign $IDENTIFIER Brave.app/',
+    'codesign --deep --force --strict --verbose --sign $IDENTIFIER TechBrowser.app/',
 
     // Package it into a dmg
     'cd ..',
     'build ' +
-      '--prepackaged="' + buildDir + '/Brave.app" ' +
+      '--prepackaged="' + buildDir + '/TechBrowser.app" ' +
       '--mac=dmg ' +
       ' --config=res/builderConfig.json ',
 
     // Create an update zip
-    'ditto -c -k --sequesterRsrc --keepParent ' + buildDir + '/Brave.app dist/Brave-' + VersionInfo.braveVersion + '.zip'
+    'ditto -c -k --sequesterRsrc --keepParent ' + buildDir + '/TechBrowser.app dist/TechBrowser-' + VersionInfo.TechBrowserVersion + '.zip'
   ]
   execute(cmds, {}, console.log.bind(null, 'done'))
 } else if (isWindows) {
   // a cert file must be present to sign the created package
   // a password MUST be passed as the CERT_PASSWORD environment variable
-  var cert = process.env.CERT || '../brave-authenticode.pfx'
+  var cert = process.env.CERT || '../TechBrowser-authenticode.pfx'
   var certPassword = process.env.CERT_PASSWORD
   if (!certPassword) {
     throw new Error('Certificate password required. Set environment variable CERT_PASSWORD.')
@@ -64,39 +64,39 @@ if (isDarwin) {
   var resultPromise = muonInstaller.createWindowsInstaller({
     appDirectory: buildDir,
     outputDirectory: outDir,
-    title: 'Brave',
-    authors: 'Brave Software',
-    loadingGif: 'res/brave_splash_installing.gif',
-    setupIcon: 'res/brave_installer.ico',
-    iconUrl: 'https://brave.com/favicon.ico',
+    title: 'Tech Browser',
+    authors: 'Tech Galaxy Software',
+    loadingGif: 'res/TechBrowser_splash_installing.gif',
+    setupIcon: 'res/TechBrowser_installer.ico',
+    iconUrl: 'https://TechBrowser.com/favicon.ico',
     signWithParams: format('-a -fd sha256 -f "%s" -p "%s" -t http://timestamp.verisign.com/scripts/timstamp.dll', path.resolve(cert), certPassword),
     noMsi: true,
-    exe: 'Brave.exe'
+    exe: 'TechBrowser.exe'
   })
   resultPromise.then(() => {
     cmds = [
-      `mv ${outDir}/Setup.exe ${outDir}/BraveSetup-${arch}.exe`
+      `mv ${outDir}/Setup.exe ${outDir}/TechBrowserSetup-${arch}.exe`
     ]
     execute(cmds, {}, console.log.bind(null, 'done'))
   }, (e) => console.log(`No dice: ${e.message}`))
 } else if (isLinux) {
-  console.log('Install with sudo dpkg -i dist/brave_' + VersionInfo.braveVersion + '_amd64.deb')
-  console.log('Or install with sudo dnf install dist/brave_' + VersionInfo.braveVersion + '.x86_64.rpm')
+  console.log('Install with sudo dpkg -i dist/TechBrowser_' + VersionInfo.TechBrowserVersion + '_amd64.deb')
+  console.log('Or install with sudo dnf install dist/TechBrowser_' + VersionInfo.TechBrowserVersion + '.x86_64.rpm')
   cmds = [
     // .deb file
     'electron-installer-debian' +
-      ' --src Brave-linux-x64/' +
+      ' --src TechBrowser-linux-x64/' +
       ' --dest dist/' +
       ' --arch amd64' +
       ' --config res/linuxPackaging.json',
     // .rpm file
     'electron-installer-redhat' +
-      ' --src Brave-linux-x64/' +
+      ' --src TechBrowser-linux-x64/' +
       ' --dest dist/' +
       ' --arch x86_64' +
       ' --config res/linuxPackaging.json',
     // .tar.bz2 file
-    'tar -jcvf dist/Brave.tar.bz2 ./Brave-linux-x64'
+    'tar -jcvf dist/TechBrowser.tar.bz2 ./TechBrowser-linux-x64'
   ]
   execute(cmds, {}, (err) => {
     if (err) {

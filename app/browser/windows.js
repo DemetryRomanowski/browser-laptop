@@ -128,7 +128,7 @@ const api = {
         
         let windowValue = getWindowValue(windowId)
 
-        //Don't know what this is ? Doesn't change ? Maybe on windows. 
+        //Don't know what this is ? Doesn't change anything !??!?!!?? Maybe on windows. 
         win.setMenuBarVisibility(true);
         
         win.webContents.once('will-destroy', () => {
@@ -278,11 +278,13 @@ const api = {
         updateWindowDebounce(windowId)
       });
     });
+
     // TODO(bridiver) - handle restoring windows
     // windowState.getWindows(state).forEach((win) => {
     //   console.log('restore', win.toJS())
     //   // restore window
     // })
+    
     return state
   },
 

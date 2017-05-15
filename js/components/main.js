@@ -726,6 +726,27 @@ class Main extends ImmutableComponent {
         : null
       }
       <div className='top'>
+        <TabsToolbar
+          paintTabs={getSetting(settings.PAINT_TABS)}
+          shouldAllowWindowDrag={shouldAllowWindowDrag}
+          dragData={this.props.appState.getIn(['dragData', 'type']) === dragTypes.TAB && this.props.appState.get('dragData')}
+          previewTabs={getSetting(settings.SHOW_TAB_PREVIEWS)}
+          tabsPerTabPage={tabsPerPage}
+          tabPageIndex={this.props.windowState.getIn(['ui', 'tabs', 'tabPageIndex'])}
+          previewTabPageIndex={this.props.windowState.getIn(['ui', 'tabs', 'previewTabPageIndex'])}
+          fixTabWidth={this.props.windowState.getIn(['ui', 'tabs', 'fixTabWidth'])}
+          frames={this.props.windowState.get('frames')}
+          sites={appStateSites}
+          key='tab-bar'
+          activeFrameKey={(activeFrame && activeFrame.get('key')) || undefined}
+          onMenu={this.onHamburgerMenu}
+          notificationBarActive={notificationBarOrigin}
+          hasTabInFullScreen={
+            sortedFrames
+              .map((frame) => frame.get('isFullScreen'))
+              .some(fullScreenMode => fullScreenMode === true)
+          }
+        />
         <Navigator />
         {
           siteInfoIsVisible
@@ -852,27 +873,7 @@ class Main extends ImmutableComponent {
             : null
           }
         </div>
-        <TabsToolbar
-          paintTabs={getSetting(settings.PAINT_TABS)}
-          shouldAllowWindowDrag={shouldAllowWindowDrag}
-          dragData={this.props.appState.getIn(['dragData', 'type']) === dragTypes.TAB && this.props.appState.get('dragData')}
-          previewTabs={getSetting(settings.SHOW_TAB_PREVIEWS)}
-          tabsPerTabPage={tabsPerPage}
-          tabPageIndex={this.props.windowState.getIn(['ui', 'tabs', 'tabPageIndex'])}
-          previewTabPageIndex={this.props.windowState.getIn(['ui', 'tabs', 'previewTabPageIndex'])}
-          fixTabWidth={this.props.windowState.getIn(['ui', 'tabs', 'fixTabWidth'])}
-          frames={this.props.windowState.get('frames')}
-          sites={appStateSites}
-          key='tab-bar'
-          activeFrameKey={(activeFrame && activeFrame.get('key')) || undefined}
-          onMenu={this.onHamburgerMenu}
-          notificationBarActive={notificationBarOrigin}
-          hasTabInFullScreen={
-            sortedFrames
-              .map((frame) => frame.get('isFullScreen'))
-              .some(fullScreenMode => fullScreenMode === true)
-          }
-        />
+        
         {
           hasNotifications && activeFrame
           ? <NotificationBar notifications={notifications} activeFrame={activeFrame} />

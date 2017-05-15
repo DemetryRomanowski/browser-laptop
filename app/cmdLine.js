@@ -63,6 +63,7 @@ const getUrlFromCommandLine = (argv) => {
         return fileUrl(filePath)
       }
     }
+    //TODO(Demetry): Add command stuff here
     const index = argv.indexOf('--')
     if (index !== -1 && index + 1 < argv.length && !argv[index + 1].startsWith('-')) {
       const parsedUrl = urlParse(argv[index + 1])

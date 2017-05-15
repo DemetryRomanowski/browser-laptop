@@ -17,7 +17,8 @@
 // (macOS) We need to keep a padding left to avoid overlapping
 // with the window buttons to close/maximize/minimize the window.
 .platform--darwin .navigatorWrapper .backforward {
-  margin-left: @navbarLeftMarginDarwin;
+  // margin-left: @navbarLeftMarginDarwin;
+  margin-left: 0px; 
 
   &.fullscreen {
     margin-left: 0;
@@ -451,12 +452,17 @@
 // box on its left has different size than the one on the right.
 // This is achieved by the local variable `@centerOffset`.
 .navigatorWrapper {
+
+  height: 11px;
+  margin-left: 0px;
+
   // Since we want to keep the navigator centered, we need to calculate the
   // difference between the width of the left box and the width of the right box.
   @centerOffset: 2 * (@navbarButtonWidth + @navbarButtonSpacing) // width area on the left
                  - (@navbarBraveButtonWidth + 2 * @navbarButtonSpacing);
 
   @rightMargin: @navbarLeftMarginDarwin / 2;
+  // @rightMargin: 0;
 
   display: flex;
 

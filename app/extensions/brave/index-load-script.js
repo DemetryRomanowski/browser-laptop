@@ -6,6 +6,8 @@ baseNode.href = baseHref
 document.getElementsByTagName('head')[0].appendChild(baseNode)
 
 const createScript = function (scriptPath) {
+  console.log(scriptPath);
+  
   return new Promise(function (resolve, reject) {
     var script = document.createElement('script')
     script.type = 'text/javascript'
