@@ -702,6 +702,7 @@ class Main extends ImmutableComponent {
     const hasNotifications = notifications && notifications.size
     const notificationBarOrigin = notifications.map(bar => bar.get('frameOrigin'))
 
+    //You fucks could have told me this is where the html is built.. for fuck sakes. 
     return <div id='window'
       className={cx({
         isFullScreen: activeFrame && activeFrame.get('isFullScreen'),

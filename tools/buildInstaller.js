@@ -26,6 +26,9 @@ if (isDarwin) {
     process.exit(1)
   }
 
+  // process.env.IDENTIFIER = "Tech Galaxy"; 
+  // const identifier = process.env.IDENTIFIER;  
+
   cmds = [
     // Remove old
     'rm -f ' + outDir + '/TechBrowser.dmg',
