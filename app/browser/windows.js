@@ -23,19 +23,19 @@ const Immutable = require('immutable')
 let currentWindows = {}
 
 const cleanupWindow = (windowId) => {
-  delete currentWindows[windowId]
-  appActions.windowClosed({ windowId })
+  delete currentWindows[windowId];
+  appActions.windowClosed({ windowId });
 }
 
 const getWindowState = (win) => {
   if (win.isFullScreen()) {
-    return 'fullscreen'
+    return 'fullscreen';
   } else if (win.isMinimized()) {
-    return 'minimized'
+    return 'minimized';
   } else if (win.isMaximized()) {
-    return 'maximized'
+    return 'maximized';
   } else {
-    return 'normal'
+    return 'normal';
   }
 }
 
@@ -118,44 +118,67 @@ const api = {
       const updateWindowDebounce = debounce(updateWindow, 5)
 
       win.once('initialized', () => {
+
+        //When the window is initialized
+        console.log("Window is initialized: " + win.id); 
+
         windowId = win.id
+        
         currentWindows[windowId] = win
+        
         let windowValue = getWindowValue(windowId)
 
-        win.setMenuBarVisibility(true)
+        //Don't know what this is ? Doesn't change ? Maybe on windows. 
+        win.setMenuBarVisibility(true);
+        
         win.webContents.once('will-destroy', () => {
           LocalShortcuts.unregister(win)
         })
+        
         win.webContents.once('close', () => {
           LocalShortcuts.unregister(win)
         })
+        
         win.once('close', () => {
           LocalShortcuts.unregister(win)
         })
+        
         win.on('scroll-touch-begin', function (e) {
           win.webContents.send('scroll-touch-begin')
         })
+        
         win.on('scroll-touch-end', function (e) {
           win.webContents.send('scroll-touch-end')
         })
+        
         win.on('scroll-touch-edge', function (e) {
           win.webContents.send('scroll-touch-edge')
         })
+        
         win.on('swipe', function (e, direction) {
           win.webContents.send('swipe', direction)
         })
+
+        //Can change things when the screen goes fullscreen.
         win.on('enter-full-screen', function () {
+
+          console.log("Entered full screen");
+
           if (win.isMenuBarVisible()) {
             win.setMenuBarVisibility(false)
           }
-        })
+        });
+        
         win.on('leave-full-screen', function () {
           win.webContents.send(messages.LEAVE_FULL_SCREEN)
+
+          console.log("Left full screen");
 
           if (getSetting(settings.AUTO_HIDE_MENU) === false) {
             win.setMenuBarVisibility(true)
           }
-        })
+        });
+        
         win.on('app-command', function (e, cmd) {
           switch (cmd) {
             case 'browser-backward':
@@ -165,6 +188,7 @@ const api = {
               win.webContents.send(messages.SHORTCUT_ACTIVE_FRAME_FORWARD)
           }
         })
+        
         win.webContents.on('crashed', (e) => {
           console.error('Window crashed. Reloading...')
           win.loadURL(appUrlUtil.getBraveExtIndexHTML())
@@ -191,35 +215,45 @@ const api = {
 
         appActions.windowCreated(windowValue)
       })
+
       win.once('closed', () => {
         cleanupWindow(windowId)
       })
+      
       win.on('blur', () => {
         appActions.windowBlurred(windowId)
         updateWindowDebounce(windowId)
       })
+      
       win.on('focus', () => {
         appActions.windowFocused(windowId)
         updateWindowDebounce(windowId)
       })
+      
       win.on('show', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('hide', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('maximize', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('unmaximize', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('minimize', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('restore', () => {
         updateWindowDebounce(windowId)
       })
+      
       win.on('resize', () => {
         updateWindowDebounce(windowId)
         const size = win.getSize()
@@ -227,6 +261,7 @@ const api = {
         // NOTE: the default window size is whatever the last window resize was
         appActions.defaultWindowParamsChanged(size, position)
       })
+      
       win.on('move', () => {
         updateWindowMove(windowId)
         const size = win.getSize()
@@ -234,13 +269,15 @@ const api = {
         // NOTE: the default window position is whatever the last window move was
         appActions.defaultWindowParamsChanged(size, position)
       })
+      
       win.on('enter-full-screen', () => {
         updateWindowDebounce(windowId)
-      })
+      });
+      
       win.on('leave-full-screen', () => {
         updateWindowDebounce(windowId)
-      })
-    })
+      });
+    });
     // TODO(bridiver) - handle restoring windows
     // windowState.getWindows(state).forEach((win) => {
     //   console.log('restore', win.toJS())

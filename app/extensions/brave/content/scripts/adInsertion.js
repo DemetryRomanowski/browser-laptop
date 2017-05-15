@@ -11,7 +11,11 @@ if (chrome.contentSettings.adInsertion == 'allow') {
    * @param node The node that is being replaced
    * @param iframeData The known preprocessed iframeData for that node
    */
+
+  //FUCK ADS!
   function getAdSize (node, iframeData) {
+    return null;
+
     var acceptableAdSizes = [
       [970, 250],
       [970, 90],
@@ -116,6 +120,9 @@ if (chrome.contentSettings.adInsertion == 'allow') {
   }
 
   function setAdDivCandidates(adDivCandidates, placeholderUrl) {
+
+    return ""; 
+    
     var fallbackNodeDataForCommon = {}
 
     // Process all of the specific ad information for this page

@@ -4,7 +4,7 @@
   "description": "Brave laptop and desktop browser",
   "main": "./app/index.js",
   "config": {
-    "port": "8080"
+    "port": "1344"
   },
   "scripts": {
     "add-simulated-payment-history": "node ./tools/addSimulatedPaymentHistory.js",
@@ -77,13 +77,17 @@
     {
       "name": "Cezar Augusto",
       "email": "cezar@brave.com"
+    },
+    {
+      "name": "Demetry Romanowski",
+      "email": "demetry.r@techgalaxy.ca"
     }
   ],
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/brave/browser-laptop/issues"
   },
-  "homepage": "https://www.brave.com/",
+  "homepage": "https://www.techgalaxy.ca/",
   "dependencies": {
     "acorn": "3.2.0",
     "ad-block": "^3.0.2",

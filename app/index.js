@@ -32,6 +32,7 @@ const handleUncaughtError = (error) => {
     }, 60 * 1000)
   }
 }
+
 process.on('uncaughtException', function (error) {
   handleUncaughtError(error)
 })
@@ -243,14 +244,14 @@ app.on('ready', () => {
     let host = urlParse(url).host
     if (host && acceptCertDomains[host] === true) {
       // Ignore the cert error
-      cb('continue')
-      return
+      cb('continue');
+      return;
     } else {
-      cb('deny')
+      cb('deny');
     }
 
     if (resourceType !== 'mainFrame') {
-      return
+      return;
     }
 
     notifyCertError(webContents, url, error, cert)
@@ -267,14 +268,14 @@ app.on('ready', () => {
 
   app.on('before-quit', (e) => {
     if (shuttingDown && sessionStateStoreComplete) {
-      return
+      return;
     }
 
     e.preventDefault()
 
     // before-quit can be triggered multiple times because of the preventDefault call
     if (shuttingDown) {
-      return
+      return;
     } else {
       shuttingDown = true
     }
